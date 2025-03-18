@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-build:
-    uses: ./.github/workflows/msbuild-reusable.yml
+    uses: kirandevops1993/.github/workflows/msbuild-reusable.yml@main
     with:
       solution_path: 'AspnetCoreMvcFull.sln'
       project_path: 'src/AspnetCoreMvcFull.csproj'

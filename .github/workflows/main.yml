@@ -1,1 +1,15 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/msbuild-reusable.yml
+    with:
+      solution_path: 'AspnetCoreMvcFull.sln'
+      project_path: 'src/AspnetCoreMvcFull.csproj'
+      build_configuration: 'Release'
 

@@ -10,6 +10,6 @@ jobs:
     uses: kirandevops1993/REUSABLE-.NET-REPO-/.github/workflows/msbuild-reusable.yml@main
     with:
       solution_path: 'AspnetCoreMvcFull.sln'
-      project_path: 'src/AspnetCoreMvcFull.csproj'
+      project_path: 'AspnetCoreMvcFull.csproj'
       build_configuration: 'Release'
 

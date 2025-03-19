@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/msbuild-reusable.yml
+    uses: kirandevops1993/MS-BUILD-TASKS-REUSABLE-/.github/workflows/msbuildtasks-reusable.yml@main
     with:
       platform: "x64"
       configuration: "Release"

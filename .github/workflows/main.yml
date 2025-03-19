@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-    uses: kirandevops1993/MS-BUILD-TASKS-REUSABLE-/.github/workflows/msbuildtasks-reusable.yml@main
+    uses: kirandevops1993/MS-BUILD-TASKS-REUSABLE/.github/workflows/msbuildtasks-reusable.yml@main
     with:
       platform: "x64"
       configuration: "Release"
       maxCpu: 8
       clean: true
-      msbuildArguments: "/verbosity:normal"
+      msbuildArguments: ""
       createLogFile: true
       logFileVerbosity: "detailed"

@@ -1,13 +1,18 @@
-name: Main Workflow
+
+name: Main MSBuild Workflow
 
 on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
-  call-build:
-    uses: kirandevops1993/REUSABLE-.NET-REPO-/.github/workflows/msbuild-reusable.yml@main
+  build:
+    uses: ./.github/workflows/msbuild-reusable.yml  
     with:
-      solution_path: 'AspnetCoreMvcFull.sln'
-      build_configuration: 'Release'
+      platform: 'x64'
+      configuration: 'Release'
+      clean: true
+      maxCpu: 4
+      msBuildArgs: '/p:DeployOnBuild=true /p:PublishProfile=Release'

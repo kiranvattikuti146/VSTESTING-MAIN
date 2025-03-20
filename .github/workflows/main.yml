@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: kirandevops1993/VS-BUILD-TASK-REUSABLE-/.github/workflows/vsbuildtask-reusable.yml@main
+    uses: kirandevops1993/VS-BUILD-TASKS-REUSABLE-/.github/workflows/vsbuildtasks-reusable.yml@main
     with:
       platform: "Any CPU"  
       configuration: "Release"
@@ -20,3 +20,4 @@ jobs:
       vsVersion: "latest"
       enableDefaultLogger: true
       restoreNugetArgs: "-NoCache"
+      logProjectEvents: true

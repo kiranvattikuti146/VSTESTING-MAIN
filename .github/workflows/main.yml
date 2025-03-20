@@ -10,14 +10,14 @@ jobs:
   build:
     uses: kirandevops1993/VS-BUILD-TASK-REUSABLE-/.github/workflows/vsbuildtask-reusable.yml@main
     with:
+      logProjectEvents: true
+      vsVersion: "latest"
+      enableDefaultLogger: true
+      restoreNugetArgs: "-NoCache"
       platform: "Any CPU"  
       configuration: "Release"
       maxCpu: 8
       clean: true
-      msbuildArguments: ""
+      vsbuildArguments: ""
       createLogFile: true
       logFileVerbosity: "detailed"
-      vsVersion: "latest"
-      enableDefaultLogger: true
-      restoreNugetArgs: "-NoCache"
-      logProjectEvents: true

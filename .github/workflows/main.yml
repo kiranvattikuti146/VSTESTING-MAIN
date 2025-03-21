@@ -1,27 +1,24 @@
-name: VS Test Main Workflow
+name: Main Workflow
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  test:
-    uses: kirandevops1993/VS-BUILD-TASK-REUSABLE-/.github/workflows/vsbuildtask-reusable.yml@main
+  run-tests:
+    uses: kirandevops1993/VS-BUILD-TASK-REUSABLE/.github/workflows/vsbuildtask-reusable.yml@main
     with:
-      vsTestVersion: "latest"
-      testAssembly: "**/*Tests.dll"
+      vsTestVersion: "16.0"
+      testAssembly: "*Tests.dll"
       testFilterCriteria: "TestCategory=Unit"
       runSettingsFile: "test.runsettings"
       codeCoverageEnabled: true
       pathToCustomTestAdapters: ""
       overrideTestRunParameters: ""
-      otherConsoleOptions: ""
-      testRunTitle: "Main Branch Test Run"
-      platform: "x64"
-      configuration: "Release"
       publishRunAttachments: true
       runInParallel: true
-      vsTestLocationMethod: "auto"
-      vsTestLocation: ""
+      testRunTitle: "Unit Tests"
+      platform: "x64"
+      configuration: "Release"
+      otherConsoleOptions: "/logger:trx"

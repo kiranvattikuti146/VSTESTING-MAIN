@@ -1,4 +1,4 @@
-name: VSBuild Main Workflow
+name: VS Test Main Workflow
 
 on:
   push:
@@ -7,17 +7,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     uses: kirandevops1993/VS-BUILD-TASK-REUSABLE-/.github/workflows/vsbuildtask-reusable.yml@main
     with:
-      logProjectEvents: true
-      vsVersion: "latest"
-      enableDefaultLogger: true
-      restoreNugetArgs: "-NoCache"
-      platform: "Any CPU"  
+      vsTestVersion: "latest"
+      testAssembly: "**/*Tests.dll"
+      testFilterCriteria: "TestCategory=Unit"
+      runSettingsFile: "test.runsettings"
+      codeCoverageEnabled: true
+      pathToCustomTestAdapters: ""
+      overrideTestRunParameters: ""
+      otherConsoleOptions: ""
+      testRunTitle: "Main Branch Test Run"
+      platform: "x64"
       configuration: "Release"
-      maxCpu: 8
-      clean: true
-      vsbuildArguments: ""
-      createLogFile: true
-      logFileVerbosity: "detailed"
+      publishRunAttachments: true
+      runInParallel: true
+      vsTestLocationMethod: "auto"
+      vsTestLocation: ""

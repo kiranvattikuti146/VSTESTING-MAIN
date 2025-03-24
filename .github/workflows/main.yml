@@ -9,13 +9,11 @@ jobs:
   run-tests:
     uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
     with:
-      dotnet-version: "6.0.x"
-      vs-test-version: "16.0"
-      test-assembly: "**/*Tests.dll"
+      dotnet-version: "7.0.x"
+      test-assembly: "**/*Tests.dll" # Ensures correct test DLLs are picked
       test-filter-criteria: "TestCategory=Unit"
       run-settings-file: "test.runsettings"
       code-coverage-enabled: true
-      run-in-parallel: true
-      test-run-title: "Unit Tests"
-      platform: "x64"
       configuration: "Release"
+      platform: "x64"
+      test-run-title: "Unit Tests"

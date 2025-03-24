@@ -10,6 +10,7 @@ jobs:
     uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
     with:
       dotnet-version: "6.0.x"
+      vs-test-version: "16.0"
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
       run-settings-file: "test.runsettings"

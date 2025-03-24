@@ -7,7 +7,7 @@ on:
 
 jobs:
   run-tests:
-    uses: kirandevops1993/VS-TEST-REUSABLE-/.github/workflows/vsbuildtask-reusable.yml@main
+    uses: kirandevops1993/VS-TEST-REUSABLE-/.github/workflows/VStest-reusable.yml@main
     with:
       vsTestVersion: "16.0"
       testAssembly: "*Tests.dll"

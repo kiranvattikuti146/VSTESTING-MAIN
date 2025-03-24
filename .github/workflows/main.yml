@@ -10,7 +10,7 @@ jobs:
     uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
     with:
       dotnet-version: "7.0.x"
-      test-assembly: "**/*Tests.dll" # Ensures correct test DLLs are picked
+      test-assembly: "**/*Tests.dll" 
       test-filter-criteria: "TestCategory=Unit"
       run-settings-file: "test.runsettings"
       code-coverage-enabled: true

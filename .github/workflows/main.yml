@@ -6,15 +6,16 @@ on:
       - main
 
 jobs:
-  test-job:
-    uses: ./.github/workflows/vstest-reusable.yml
+  run-tests:
+    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
     with:
-      dotnet-version: "6.0"
-      test-assembly: "**/*Tests.dll"
-      test-filter-criteria: "TestCategory=SmokeTests"
-      configuration: "Release"
-      platform: "x64"
+      dotnet-version: "7.0.x"
+      test-assembly: "**/*Tests.dll" 
+      test-filter-criteria: "TestCategory=Unit"
       run-settings-file: "test.runsettings"
       code-coverage-enabled: true
-      test-run-title: "MyTestRun"
-      custom-test-adapters: "test-adapters/NUnit"  
+      configuration: "Release"
+      platform: "x64"
+      test-run-title: "Unit Tests"
+      custom-test-adapters: "path/to/custom/adapters"
+      run-in-parallel: true

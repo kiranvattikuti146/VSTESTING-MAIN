@@ -17,3 +17,6 @@ jobs:
       configuration: "Release"
       platform: "x64"
       test-run-title: "Unit Tests"
+      custom-test-adapters: "path/to/custom/adapters"
+      publish-run-attachments: true
+      run-in-parallel: true

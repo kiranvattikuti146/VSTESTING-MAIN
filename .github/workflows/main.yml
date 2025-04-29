@@ -10,7 +10,7 @@ jobs:
     uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
     with:
       dotnet-version: "7.0.x"
-      test-assembly: "**/*Tests.dll" 
+      test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
       run-settings-file: "test.runsettings"
       code-coverage-enabled: true
@@ -19,3 +19,32 @@ jobs:
       test-run-title: "Unit Tests"
       custom-test-adapters: "path/to/custom/adapters"
       run-in-parallel: true
+      testPlan: "Plan1"
+      testSuite: "SuiteA"
+      testConfiguration: "DebugConfig"
+      tcmTestRun: "1234"
+      runOnlyImpactedTests: true
+      runAllTestsAfterXBuilds: "50"
+      uiTests: false
+      vstestLocationMethod: "version"
+      vsTestVersion: "latest"
+      vstestLocation: "C:/vstest.console.exe"
+      overrideTestrunParameters: "Param1=Value1"
+      otherConsoleOptions: "--verbosity normal"
+      diagnosticsEnabled: true
+      collectDumpOn: "onAbortOnly"
+      rerunFailedTests: true
+      rerunType: "basedOnTestFailurePercentage"
+      rerunFailedThreshold: "30"
+      rerunFailedTestCasesMaxLimit: "5"
+      rerunMaxAttempts: "3"
+      distributionBatchType: "basedOnTestCases"
+      batchingBasedOnAgentsOption: "autoBatchSize"
+      customBatchSizeValue: "10"
+      batchingBasedOnExecutionTimeOption: "autoBatchSize"
+      customRunTimePerBatchValue: "60"
+      dontDistribute: false
+      publishRunAttachments: true
+      donotPublishTestResults: false
+      failOnMinTestsNotRun: false
+      minimumExpectedTests: "1"

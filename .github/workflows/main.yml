@@ -34,17 +34,17 @@ jobs:
       diagnosticsEnabled: true
       collectDumpOn: "onAbortOnly"
       rerunFailedTests: true
-      rerunType: " basedOnTestFailurePercentage"
+      rerunType: "basedOnTestFailurePercentage"
       rerunFailedThreshold: "30"
       rerunFailedTestCasesMaxLimit: "5"
       rerunMaxAttempts: "3"
       distributionBatchType: "basedOnTestCases"
       batchingBasedOnAgentsOption: "autoBatchSize"
-      runOnlyImpactedTests0: "10"
-      runOnlyImpactedTests1: "autoBatchSize"
-      runOnlyImpactedTests2: "60"
+      customBatchSizeValue: "10"
+      batchingBasedOnExecutionTimeOption: "autoBatchSize"
+      customRunTimePerBatchValue: "60"
       dontDistribute: false
-      runOnlyImpactedTests3: true
-      runOnlyImpactedTests4: false
-      runOnlyImpactedTests5: false
-      runOnlyImpactedTests6: "1"
+      publishRunAttachments: true
+      donotPublishTestResults: false
+      failOnMinTestsNotRun: false
+      minimumExpectedTests: "1"

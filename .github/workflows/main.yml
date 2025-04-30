@@ -1,13 +1,11 @@
 name: Main Workflow
-
 on:
   push:
     branches:
       - main
-
 jobs:
   run-tests:
-    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
+    uses: kirandevops1993/VS-TEST-REUSABLE-/.github/workflows/VStest-reusable.yml@main
     with:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"

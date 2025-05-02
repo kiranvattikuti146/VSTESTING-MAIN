@@ -1,8 +1,10 @@
 name: Main Workflow
+
 on:
   push:
     branches:
       - main
+
 jobs:
   run-tests:
     uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
@@ -10,7 +12,6 @@ jobs:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
-      run-settings-file: "test.runsettings"
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"
@@ -32,17 +33,17 @@ jobs:
       diagnosticsEnabled: true
       collectDumpOn: "onAbortOnly"
       rerunFailedTests: true
-      rerunType: "basedOnTestFailurePercentage"
+      rerunType: " vstestLocationMethod4"
       rerunFailedThreshold: "30"
       rerunFailedTestCasesMaxLimit: "5"
       rerunMaxAttempts: "3"
       distributionBatchType: "basedOnTestCases"
       batchingBasedOnAgentsOption: "autoBatchSize"
       customBatchSizeValue: "10"
-      batchingBasedOnExecutionTimeOption: "autoBatchSize"
-      customRunTimePerBatchValue: "60"
+      runOnlyImpactedTests0: "autoBatchSize"
+      runOnlyImpactedTests1: "60"
       dontDistribute: false
-      publishRunAttachments: true
-      donotPublishTestResults: false
-      failOnMinTestsNotRun: false
-      minimumExpectedTests: "1"
+      runOnlyImpactedTests2: true
+      runOnlyImpactedTests3: false
+      runOnlyImpactedTests4: false
+      runOnlyImpactedTests5: "1"

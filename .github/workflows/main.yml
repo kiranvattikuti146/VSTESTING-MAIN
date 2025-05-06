@@ -12,13 +12,19 @@ jobs:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
+      run-settings-file: "test.runsettings"
+      code-coverage-enabled: true
+      configuration: "Release"
       platform: "x64"
+      test-run-title: "Unit Tests"
       custom-test-adapters: "path/to/custom/adapters"
       run-in-parallel: true
       testPlan: "Plan1"
       testSuite: "SuiteA"
       testConfiguration: "DebugConfig"
       tcmTestRun: "1234"
+      runOnlyImpactedTests: true
+      runAllTestsAfterXBuilds: "50"
       uiTests: false
       vstestLocationMethod: "version"
       vsTestVersion: "latest"

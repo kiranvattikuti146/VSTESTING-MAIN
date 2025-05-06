@@ -12,7 +12,6 @@ jobs:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
-      run-settings-file: "test.runsettings"
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"

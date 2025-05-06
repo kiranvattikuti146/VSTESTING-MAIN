@@ -12,7 +12,6 @@ jobs:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
-      code-coverage-enabled: true
       platform: "x64"
       custom-test-adapters: "path/to/custom/adapters"
       run-in-parallel: true

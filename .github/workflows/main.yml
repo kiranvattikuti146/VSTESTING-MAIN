@@ -26,7 +26,6 @@ jobs:
       uiTests: false
       vsTestVersion: "latest"
       vstestLocation: "C:/vstest.console.exe"
-      otherConsoleOptions: "--verbosity normal"
       diagnosticsEnabled: true
       collectDumpOn: "onAbortOnly"
       rerunFailedTests: true

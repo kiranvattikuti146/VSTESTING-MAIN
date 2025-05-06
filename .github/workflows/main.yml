@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-tests:
-    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
+    uses: ./.github/workflows/vstest-reusable.yml
     with:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"
@@ -30,6 +30,6 @@ jobs:
       diagnosticsEnabled: true
       collectDumpOn: "onAbortOnly"
       rerunFailedTests: true
-      rerunType: " runAllTestsAfterXBuilds0"
+      rerunType: "specific"
       rerunMaxAttempts: "3"
       dontDistribute: false

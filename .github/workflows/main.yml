@@ -1,8 +1,10 @@
 name: Main Workflow
+
 on:
   push:
     branches:
       - main
+
 jobs:
   run-tests:
     uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
@@ -10,11 +12,9 @@ jobs:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
-      run-settings-file: "test.runsettings"
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"
-      test-run-title: "Unit Tests"
       custom-test-adapters: "path/to/custom/adapters"
       run-in-parallel: true
       testPlan: "Plan1"

@@ -13,7 +13,6 @@ jobs:
       test-assembly: "**/*Tests.dll"
       test-filter-criteria: "TestCategory=Unit"
       code-coverage-enabled: true
-      configuration: "Release"
       platform: "x64"
       custom-test-adapters: "path/to/custom/adapters"
       run-in-parallel: true
@@ -21,8 +20,6 @@ jobs:
       testSuite: "SuiteA"
       testConfiguration: "DebugConfig"
       tcmTestRun: "1234"
-      runOnlyImpactedTests: true
-      runAllTestsAfterXBuilds: "50"
       uiTests: false
       vstestLocationMethod: "version"
       vsTestVersion: "latest"

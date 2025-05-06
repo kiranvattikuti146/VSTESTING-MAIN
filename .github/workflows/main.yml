@@ -8,7 +8,7 @@ on:
 
 jobs:
   run-tests:
-    uses: ./.github/workflows/vstest-reusable.yml
+    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
     with:
       dotnet-version: "7.0.x"
       test-assembly: "**/*Tests.dll"

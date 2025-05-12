@@ -1,33 +1,33 @@
 name: MAIN Workflow
 
-on: 
-  push: 
-    branches: 
-      - main 
-  pull_request: 
+on:  
+  push:  
+    branches:  
+      - main  
+  pull_request:  
 
-jobs: 
-  run-tests: 
-    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main 
-    with: 
-      dotnet-version: "7.0.x" 
-      test-assembly: "**/*Tests.dll" 
-      code-coverage-enabled: true 
-      configuration: "Release" 
-      platform: "x64" 
-      test-run-title: "Unit Tests" 
-      custom-test-adapters: "\"./dummy/path/to/custom/adapters\""  # Properly formatted dummy path 
-      run-in-parallel: true 
-      testPlan: '"Plan1"'  # Quoted string
-      testSuite: '"SuiteA"'  # Quoted string
-      testConfiguration: '"DebugConfig"'  # Quoted string
-      tcmTestRun: '"1234"'  # Quoted string
-      uiTests: false 
-      vsTestVersion: '"latest"'  # Quoted string
-      vstestLocation: '"C:/vstest.console.exe"'  # Properly quoted executable path
-      diagnosticsEnabled: true 
-      collectDumpOn: '"onAbortOnly"'  # Properly quoted value
-      rerunFailedTests: true 
-      rerunType: '"specific"'  # Quoted string
-      rerunMaxAttempts: '"3"'  # Quoted string
-      dontDistribute: false 
+jobs:  
+  run-tests:  
+    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main  
+    with:  
+      dotnet-version: "7.0.x"  
+      test-assembly: "**/*Tests.dll"  
+      code-coverage-enabled: true  
+      configuration: "Release"  
+      platform: "x64"  
+      test-run-title: "Unit Tests"  
+      custom-test-adapters: "./dummy/path/to/custom/adapters"  # Properly formatted dummy path  
+      run-in-parallel: true  
+      testPlan: "Plan1"  # Removed unnecessary quotes  
+      testSuite: "SuiteA"  # Removed unnecessary quotes  
+      testConfiguration: "DebugConfig"  # Removed unnecessary quotes  
+      tcmTestRun: "1234"  # Removed unnecessary quotes  
+      uiTests: false  
+      vsTestVersion: "latest"  # Removed unnecessary quotes  
+      vstestLocation: C:/vstest.console.exe  # Removed unnecessary quotes  
+      diagnosticsEnabled: true  
+      collectDumpOn: "onAbortOnly"  # Removed unnecessary quotes  
+      rerunFailedTests: true  
+      rerunType: "specific"  # Removed unnecessary quotes  
+      rerunMaxAttempts: "3"  # Removed unnecessary quotes  
+      dontDistribute: false

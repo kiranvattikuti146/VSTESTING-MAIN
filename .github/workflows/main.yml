@@ -1,33 +1,33 @@
 name: MAIN Workflow
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: 
+  push: 
+    branches: 
+      - main 
+  pull_request: 
 
-jobs:
-  run-tests:
-    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main
-    with:
-      dotnet-version: "7.0.x"
-      test-assembly: "**/*Tests.dll"
-      code-coverage-enabled: true
-      configuration: "Release"
-      platform: "x64"
-      test-run-title: "Unit Tests"
-      custom-test-adapters: "\"./dummy/path/to/custom/adapters\"" 
-      run-in-parallel: true
-      testPlan: "Plan1"
-      testSuite: "SuiteA"
-      testConfiguration: "DebugConfig"
-      tcmTestRun: "1234"
-      uiTests: false
-      vsTestVersion: "latest"
-      vstestLocation: "C:/vstest.console.exe"
-      diagnosticsEnabled: true
-      collectDumpOn: '"onAbortOnly"' 
-      rerunFailedTests: true
-      rerunType: "specific"
-      rerunMaxAttempts: "3"
-      dontDistribute: false
+jobs: 
+  run-tests: 
+    uses: kirandevops1993/VS-TEST-REUSABLE/.github/workflows/VStest-reusable.yml@main 
+    with: 
+      dotnet-version: "7.0.x" 
+      test-assembly: "**/*Tests.dll" 
+      code-coverage-enabled: true 
+      configuration: "Release" 
+      platform: "x64" 
+      test-run-title: "Unit Tests" 
+      custom-test-adapters: "./dummy/path/to/custom/adapters"  # Properly formatted dummy path 
+      run-in-parallel: true 
+      testPlan: '"Plan1"'  # Quoted string
+      testSuite: '"SuiteA"'  # Quoted string
+      testConfiguration: '"DebugConfig"'  # Quoted string
+      tcmTestRun: '"1234"'  # Quoted string
+      uiTests: false 
+      vsTestVersion: '"latest"'  # Quoted string
+      vstestLocation: '"C:/vstest.console.exe"'  # Properly quoted executable path
+      diagnosticsEnabled: true 
+      collectDumpOn: '"onAbortOnly"'  # Properly quoted value
+      rerunFailedTests: true 
+      rerunType: '"specific"'  # Quoted string
+      rerunMaxAttempts: '"3"'  # Quoted string
+      dontDistribute: false 

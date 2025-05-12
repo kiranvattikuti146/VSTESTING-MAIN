@@ -26,7 +26,7 @@ jobs:
       vsTestVersion: "latest"
       vstestLocation: "C:/vstest.console.exe"
       diagnosticsEnabled: true
-      collectDumpOn: "onAbortOnly"
+      collectDumpOn: '"onAbortOnly"' 
       rerunFailedTests: true
       rerunType: "specific"
       rerunMaxAttempts: "3"

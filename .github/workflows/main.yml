@@ -16,7 +16,7 @@ jobs:
       configuration: "Release" 
       platform: "x64" 
       test-run-title: "Unit Tests" 
-      custom-test-adapters: "./dummy/path/to/custom/adapters"  # Properly formatted dummy path 
+      custom-test-adapters: "\"./dummy/path/to/custom/adapters\""  # Properly formatted dummy path 
       run-in-parallel: true 
       testPlan: '"Plan1"'  # Quoted string
       testSuite: '"SuiteA"'  # Quoted string

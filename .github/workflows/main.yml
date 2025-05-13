@@ -24,7 +24,6 @@ jobs:
       tcmTestRun: "1234"
       uiTests: false
       vsTestVersion: "latest"
-      vstestLocation: C:/vstest.console.exe
       diagnosticsEnabled: true
       rerunFailedTests: true
       rerunType: "specific"

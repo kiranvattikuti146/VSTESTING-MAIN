@@ -16,18 +16,18 @@ jobs:
       configuration: "Release"  
       platform: "x64"  
       test-run-title: "Unit Tests"  
-      custom-test-adapters: "./path/to/existing/adapters"  # Properly formatted dummy path  
+      custom-test-adapters: "**/*Tests.dll" 
       run-in-parallel: true  
-      testPlan: "Plan1"  # Removed unnecessary quotes  
-      testSuite: "SuiteA"  # Removed unnecessary quotes  
-      testConfiguration: "DebugConfig"  # Removed unnecessary quotes  
-      tcmTestRun: "1234"  # Removed unnecessary quotes  
+      testPlan: "Plan1" 
+      testSuite: "SuiteA"  
+      testConfiguration: "DebugConfig"  
+      tcmTestRun: "1234"    
       uiTests: false  
-      vsTestVersion: "latest"  # Removed unnecessary quotes  
-      vstestLocation: C:/vstest.console.exe  # Removed unnecessary quotes  
+      vsTestVersion: "latest"  
+      vstestLocation: C:/vstest.console.exe  
       diagnosticsEnabled: true  
-      collectDumpOn: "onAbortOnly"  # Removed unnecessary quotes  
+      collectDumpOn: "onAbortOnly"  
       rerunFailedTests: true  
-      rerunType: "specific"  # Removed unnecessary quotes  
-      rerunMaxAttempts: "3"  # Removed unnecessary quotes  
+      rerunType: "specific" 
+      rerunMaxAttempts: "3"  
       dontDistribute: false

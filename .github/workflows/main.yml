@@ -12,7 +12,7 @@ jobs:
     with:
       runsOn: "windows-latest"
       dotnet-version: "7.0.x"
-      test-assembly: "**\\*full.dll"
+      test-assembly: "**\AspnetCoreMvcFull.dll"
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"

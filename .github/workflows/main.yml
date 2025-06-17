@@ -12,7 +12,8 @@ jobs:
     with:
       runsOn: "windows-latest"
       dotnet-version: "7.0.x"
-      test-assembly: '*AspnetCoreMvcFull.dll'
+      testSelector: "testAssemblies" # Using testAssemblies as the test selection method
+      testAssemblyVer2: '*AspnetCoreMvcFull.dll' # Specify the test files to run
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"

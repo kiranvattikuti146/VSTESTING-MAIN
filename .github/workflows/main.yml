@@ -12,8 +12,7 @@ jobs:
     with:
       runsOn: "windows-latest"
       dotnet-version: "7.0.x"
-      testSelector: testAssemblies
-      Default value: "**\\*full.dll"
+      test-assembly: "**\\*full.dll"
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"

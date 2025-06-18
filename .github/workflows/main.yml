@@ -13,7 +13,7 @@ jobs:
       runsOn: "windows-latest"
       dotnet-version: "7.0.x"
       testSelector: "testAssemblies" # Using testAssemblies as the test selection method
-      testAssemblyVer2: '*AspnetCoreMvcFull.dll' # Specify the test files to run
+      testAssemblyVer2: '.*AspnetCoreMvcFull\.dll$' # Corrected regex pattern
       code-coverage-enabled: true
       configuration: "Release"
       platform: "x64"

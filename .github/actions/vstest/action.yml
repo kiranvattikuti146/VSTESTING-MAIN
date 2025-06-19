@@ -65,6 +65,24 @@ inputs:
   dontDistribute:
     required: false
     type: boolean
+  searchFolder:
+    required: true
+    type: string
+  resultsFolder: # New input
+    required: false
+    type: string
+    default: "${{ github.workspace }}/TestResults"
+  testFiltercriteria: # New input
+    required: false
+    type: string
+  runOnlyImpactedTests: # New input
+    required: false
+    type: boolean
+    default: false
+  runAllTestsAfterXBuilds: # New input
+    required: false
+    type: string
+    default: "50"
 
 runs:
   using: 'composite'
@@ -90,7 +108,7 @@ runs:
       shell: pwsh
       run: |
         # Ensure the correct working directory
-        $workingDirectory = "${{ github.workspace }}"
+        $workingDirectory = "${{ inputs.searchFolder }}"
         Set-Location -Path $workingDirectory
 
         # Check if testSelector is testAssemblies
@@ -112,10 +130,16 @@ runs:
           if (${{ inputs.run-in-parallel }}) { $vstestArgs += '/Parallel' }
           if (${{ inputs.diagnosticsEnabled }}) { $vstestArgs += '/Diag:logfile.txt' }
           if (${{ inputs.rerunFailedTests }}) { $vstestArgs += "/Rerun:${{ inputs.rerunType }}" }
+          if (-not [string]::IsNullOrEmpty("${{ inputs.testFiltercriteria }}")) { $vstestArgs += "/TestCaseFilter:${{ inputs.testFiltercriteria }}" }
+          if (${{ inputs.runOnlyImpactedTests }}) { 
+            $vstestArgs += "/ImpactedTests"
+            $vstestArgs += "/RunAllTestsAfter:${{ inputs.runAllTestsAfterXBuilds }}"
+          }
+          if (${{ inputs.uiTests }}) { $vstestArgs += "/UITests" }
 
           # Run VSTest for each resolved test assembly
           foreach ($testAssembly in $testAssemblies) {
-            $command = "${{ inputs.vstestLocation }} `"$testAssembly`" /Settings:TestSettings.runsettings $($vstestArgs -join ' ')"
+            $command = "${{ inputs.vstestLocation }} `"$testAssembly`" /Settings:TestSettings.runsettings /ResultsDirectory:${{ inputs.resultsFolder }} $($vstestArgs -join ' ')"
             Write-Host "Executing: $command"
             Invoke-Expression $command
           }

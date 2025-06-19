@@ -139,7 +139,7 @@ runs:
 
         # Verify vstest.console.exe exists
         $vstestPath = "${{ inputs.vstestLocation }}"
-        if (-not (Test-Path -Path $vstestPath)) {
+        if (-not (Test-Path -Path $vstestPath -PathType Leaf)) {
           Write-Error "vstest.console.exe not found at path: $vstestPath"
           exit 1
         }

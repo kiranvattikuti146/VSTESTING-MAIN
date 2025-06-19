@@ -157,7 +157,7 @@ runs:
           # Properly format paths using [System.IO.Path]::Combine and escape them
           $escapedTestAssembly = "`"$($testAssembly -replace '', '')`"" # Properly escape the test assembly path
           $escapedVSTestLocation = "`"" + "${{ inputs.vstestLocation }}" + "`"" # Properly escape vstest.console.exe path
-          $escapedRunSettingsFile = "`"$(${{ inputs.runSettingsFile }} -replace '', '')`"" # Properly escape runsettings file path
+          $escapedRunSettingsFile = "`"" + "${{ inputs.runSettingsFile }}" + "`"" # Properly escape runsettings file path
           $escapedResultsFolder = "`"$($env:RESULTS_FOLDER -replace '', '')`"" # Properly escape results folder path
 
           $command = "$escapedVSTestLocation $escapedTestAssembly /Settings:$escapedRunSettingsFile /ResultsDirectory:$escapedResultsFolder $($vstestArgs -join ' ')"

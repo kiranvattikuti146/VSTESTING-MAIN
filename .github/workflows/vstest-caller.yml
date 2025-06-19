@@ -8,16 +8,16 @@ on:
 
 jobs:
   vstest-action:
-    runs-on: "windows-latest"
+    runs-on: "Self-hosted"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: dotnet-test
+      - name: VS-TEST
         uses: ./.github/actions/VSTEST
         with:
           runsOn: "self-hosted"
-          dotnet-version: "7.0.x"
+          dotnet-version: "9.0.203"
           testSelector: "testAssemblies"
           testAssemblyVer2: '*Abstractions.dll'
           code-coverage-enabled: true

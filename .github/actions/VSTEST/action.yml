@@ -125,8 +125,9 @@ runs:
         $uiTests = [bool]::Parse("${{ inputs.uiTests }}")
         $runOnlyImpactedTests = [bool]::Parse("${{ inputs.runOnlyImpactedTests }}")
 
-        # Resolve test assemblies from the bin directory, filtering only .dll files
-        $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File -Include *.dll | ForEach-Object { $_.FullName }
+        # Resolve test assemblies from the bin directory, excluding obj folder
+        $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File -Include *.dll |
+          Where-Object { $_.FullName -notmatch '\\obj\\' } | ForEach-Object { $_.FullName }
         if (-not $testAssemblies) {
           Write-Error "No test assemblies found."
           exit 1
@@ -154,11 +155,11 @@ runs:
 
         # Run VSTest for each resolved test assembly
         foreach ($testAssembly in $testAssemblies) {
-          # Properly format paths using [System.IO.Path]::Combine and escape them
-          $escapedTestAssembly = "`"$($testAssembly -replace '', '')`"" # Properly escape the test assembly path
+          # Properly escape paths for vstest.console.exe
+          $escapedTestAssembly = "`"$($testAssembly -replace '`', '``')`"" # Escape backticks
           $escapedVSTestLocation = "`"" + "${{ inputs.vstestLocation }}" + "`"" # Properly escape vstest.console.exe path
           $escapedRunSettingsFile = "`"" + "${{ inputs.runSettingsFile }}" + "`"" # Properly escape runsettings file path
-          $escapedResultsFolder = "`"$($env:RESULTS_FOLDER -replace '', '')`"" # Properly escape results folder path
+          $escapedResultsFolder = "`"$($env:RESULTS_FOLDER -replace '`', '``')`"" # Properly escape results folder path
 
           $command = "$escapedVSTestLocation $escapedTestAssembly /Settings:$escapedRunSettingsFile /ResultsDirectory:$escapedResultsFolder $($vstestArgs -join ' ')"
           Write-Host "Executing: $command"

@@ -1,5 +1,3 @@
-workflow:
-
 name: VSTest Reusable Workflow
 
 inputs:
@@ -67,24 +65,6 @@ inputs:
   dontDistribute:
     required: false
     type: boolean
-  searchFolder:
-    required: true
-    type: string
-  resultsFolder: # New input
-    required: false
-    type: string
-    default: "${{ github.workspace }}/TestResults"
-  testFiltercriteria: # New input
-    required: false
-    type: string
-  runOnlyImpactedTests: # New input
-    required: false
-    type: boolean
-    default: false
-  runAllTestsAfterXBuilds: # New input
-    required: false
-    type: string
-    default: "50"
 
 runs:
   using: 'composite'
@@ -92,7 +72,6 @@ runs:
     - name: Restore dependencies
       shell: pwsh
       run: dotnet restore
-    
 
     - name: Build solution
       shell: pwsh
@@ -111,36 +90,42 @@ runs:
       shell: pwsh
       run: |
         # Ensure the correct working directory
-        $workingDirectory = "${{ inputs.searchFolder }}"
+        $workingDirectory = "${{ github.workspace }}"
         Set-Location -Path $workingDirectory
 
-        # Resolve test assemblies from the bin directory
-        $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File | ForEach-Object { $_.FullName }
-        if (-not $testAssemblies) {
-          Write-Error "No test assemblies found."
+        # Convert inputs to boolean
+        $codeCoverageEnabled = [bool]${{ inputs.code-coverage-enabled }}
+        $runInParallel = [bool]${{ inputs.run-in-parallel }}
+        $diagnosticsEnabled = [bool]${{ inputs.diagnosticsEnabled }}
+        $rerunFailedTests = [bool]${{ inputs.rerunFailedTests }}
+
+        # Check if testSelector is testAssemblies
+        if ("${{ inputs.testSelector }}" -eq "testAssemblies") {
+          # Resolve test assemblies from the bin directory
+          $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File | Where-Object { $_.FullName -match "bin/.*/${{ inputs.configuration }}/.*${{ inputs.testAssemblyVer2 }}" } | ForEach-Object { $_.FullName }
+          if (-not $testAssemblies) {
+            Write-Error "No test assemblies found matching the pattern '${{ inputs.testAssemblyVer2 }}'."
+            exit 1
+          }
+
+          # Debug: List resolved test assemblies
+          Write-Host "Resolved test assemblies:"
+          $testAssemblies | ForEach-Object { Write-Host $_ }
+
+          # Construct VSTest arguments
+          $vstestArgs = @()
+          if ($codeCoverageEnabled) { $vstestArgs += '/EnableCodeCoverage' }
+          if ($runInParallel) { $vstestArgs += '/Parallel' }
+          if ($diagnosticsEnabled) { $vstestArgs += '/Diag:logfile.txt' }
+          if ($rerunFailedTests) { $vstestArgs += "/Rerun:${{ inputs.rerunType }}" }
+
+          # Run VSTest for each resolved test assembly
+          foreach ($testAssembly in $testAssemblies) {
+            $command = "${{ inputs.vstestLocation }} `"$testAssembly`" /Settings:TestSettings.runsettings $($vstestArgs -join ' ')"
+            Write-Host "Executing: $command"
+            Invoke-Expression $command
+          }
+        } else {
+          Write-Error "Unsupported testSelector '${{ inputs.testSelector }}'. Only 'testAssemblies' is supported in this workflow."
           exit 1
-        }
-
-        # Debug: List resolved test assemblies
-        Write-Host "Resolved test assemblies:"
-        $testAssemblies | ForEach-Object { Write-Host $_ }
-
-        # Construct VSTest arguments
-        $vstestArgs = @()
-        if (${{ inputs.code-coverage-enabled }}) { $vstestArgs += '/EnableCodeCoverage' }
-        if (${{ inputs.run-in-parallel }}) { $vstestArgs += '/Parallel' }
-        if (${{ inputs.diagnosticsEnabled }}) { $vstestArgs += '/Diag:logfile.txt' }
-        if (${{ inputs.rerunFailedTests }}) { $vstestArgs += "/Rerun:${{ inputs.rerunType }}" }
-        if (-not [string]::IsNullOrEmpty("${{ inputs.testFiltercriteria }}")) { $vstestArgs += "/TestCaseFilter:${{ inputs.testFiltercriteria }}" }
-        if (${{ inputs.runOnlyImpactedTests }}) { 
-          $vstestArgs += "/ImpactedTests"
-          $vstestArgs += "/RunAllTestsAfter:${{ inputs.runAllTestsAfterXBuilds }}"
-        }
-        if (${{ inputs.uiTests }}) { $vstestArgs += "/UITests" }
-
-        # Run VSTest for each resolved test assembly
-        foreach ($testAssembly in $testAssemblies) {
-          $command = "${{ inputs.vstestLocation }} `"$testAssembly`" /Settings:TestSettings.runsettings /ResultsDirectory:${{ inputs.resultsFolder }} $($vstestArgs -join ' ')"
-          Write-Host "Executing: $command"
-          Invoke-Expression $command
         }

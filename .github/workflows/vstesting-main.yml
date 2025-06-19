@@ -43,7 +43,7 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "C:\\Users\\${{ env.USERNAME }}\\.dotnet\\tools\\vstest.console.exe"
+          vstestLocation: "${{ env.USERPROFILE }}\\.dotnet\\tools\\vstest.console.exe"
           runSettingsFile: "${{ github.workspace }}TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true

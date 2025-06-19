@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/vstest
         with:
           runsOn: "windows-latest"
-          dotnet-version: "7.0.x"
+          dotnet-version: "9.0.x"
           testSelector: "testAssemblies" # Using testAssemblies as the test selection method
           testAssemblyVer2: '*Abstractions.dll' # Specify the test files to run
           code-coverage-enabled: true

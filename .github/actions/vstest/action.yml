@@ -89,7 +89,7 @@ runs:
   steps:
     - name: Restore dependencies
       shell: pwsh
-      run: dotnet restore
+    
 
     - name: Build solution
       shell: pwsh

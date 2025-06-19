@@ -31,7 +31,7 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform"
+          vstestLocation: "C:\\Program Files\\Microsoft Visual Studio\\2022\\community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
           runSettingsFile: "${{ github.workspace }}/TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true

@@ -8,34 +8,10 @@ on:
 
 jobs:
   vstest-action:
-    runs-on: "self-hosted"
+    runs-on: "windows-latest"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: Install Visual Studio Test Platform (if missing)
-        shell: pwsh
-        run: |
-          echo "Checking if Visual Studio Test Platform is installed..."
-          $vstestPath = "${{ github.workspace }}.vstesttoolsnetcoreappvstest.console.dll"
-          if (!(Test-Path $vstestPath)) {
-            echo "vstest.console.exe not found. Downloading and extracting Visual Studio Test Platform..."
-            $nugetUrl = "https://www.nuget.org/api/v2/package/Microsoft.TestPlatform"
-            $nugetPackagePath = "${{ github.workspace }}.vstestMicrosoft.TestPlatform.nupkg"
-            $extractPath = "${{ github.workspace }}.vstesttools"
-
-            # Download the NuGet package
-            Invoke-WebRequest -Uri $nugetUrl -OutFile $nugetPackagePath
-
-            # Extract the NuGet package
-            mkdir -Force $extractPath
-            Add-Type -AssemblyName System.IO.Compression.FileSystem
-            [System.IO.Compression.ZipFile]::ExtractToDirectory($nugetPackagePath, $extractPath)
-
-            echo "Visual Studio Test Platform downloaded and extracted successfully."
-          } else {
-            echo "vstest.console.exe is already installed at $vstestPath."
-          }
 
       - name: VS-TEST
         uses: ./.github/actions/VSTESTING
@@ -55,15 +31,15 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "${{ github.workspace }}.vstesttoolsnetcoreappvstest.console.dll"
-          runSettingsFile: "${{ github.workspace }}TestSettings.runsettings"
+          vstestLocation: "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe"
+          runSettingsFile: "${{ github.workspace }}/TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true
           rerunType: "specific"
           rerunMaxAttempts: "3"
           dontDistribute: false
           searchFolder: "${{ github.workspace }}"
-          resultsFolder: "${{ github.workspace }}TestResults"
+          resultsFolder: "${{ github.workspace }}/TestResults"
           testFiltercriteria: ""
           runOnlyImpactedTests: false
           runAllTestsAfterXBuilds: "50"

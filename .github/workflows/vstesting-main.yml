@@ -17,13 +17,22 @@ jobs:
         shell: pwsh
         run: |
           echo "Checking if Visual Studio Test Platform is installed..."
-          $vstestPath = "${{ github.workspace }}.vstestvstest.console.exe"
+          $vstestPath = "${{ github.workspace }}.vstesttoolsnetcoreappvstest.console.dll"
           if (!(Test-Path $vstestPath)) {
-            echo "vstest.console.exe not found. Installing Visual Studio Test Platform using NuGet..."
-            mkdir -Force "${{ github.workspace }}.vstest"
-            cd "${{ github.workspace }}.vstest"
-            dotnet new tool-manifest
-            dotnet tool install Microsoft.TestPlatform --tool-path "${{ github.workspace }}.vstest"
+            echo "vstest.console.exe not found. Downloading and extracting Visual Studio Test Platform..."
+            $nugetUrl = "https://www.nuget.org/api/v2/package/Microsoft.TestPlatform"
+            $nugetPackagePath = "${{ github.workspace }}.vstestMicrosoft.TestPlatform.nupkg"
+            $extractPath = "${{ github.workspace }}.vstesttools"
+
+            # Download the NuGet package
+            Invoke-WebRequest -Uri $nugetUrl -OutFile $nugetPackagePath
+
+            # Extract the NuGet package
+            mkdir -Force $extractPath
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            [System.IO.Compression.ZipFile]::ExtractToDirectory($nugetPackagePath, $extractPath)
+
+            echo "Visual Studio Test Platform downloaded and extracted successfully."
           } else {
             echo "vstest.console.exe is already installed at $vstestPath."
           }
@@ -46,7 +55,7 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "${{ github.workspace }}.vstestvstest.console.exe"
+          vstestLocation: "${{ github.workspace }}.vstesttoolsnetcoreappvstest.console.dll"
           runSettingsFile: "${{ github.workspace }}TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true

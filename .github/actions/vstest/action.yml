@@ -12,10 +12,10 @@ workflow:
     testSelector:
       required: true
       type: string
-      default: "testAssemblies" # Default to testAssemblies
+      default: "testAssemblies"
     testAssemblyVer2:
       required: true
-      type: string # Required when testSelector = testAssemblies
+      type: string
     configuration:
       required: true
       type: string
@@ -70,18 +70,18 @@ workflow:
     searchFolder:
       required: true
       type: string
-    resultsFolder: # New input
+    resultsFolder:
       required: false
       type: string
-      default: "${{ github.workspace }}/TestResults"
-    testFiltercriteria: # New input
+      default: ${{ github.workspace }}/TestResults
+    testFiltercriteria:
       required: false
       type: string
-    runOnlyImpactedTests: # New input
+    runOnlyImpactedTests:
       required: false
       type: boolean
       default: false
-    runAllTestsAfterXBuilds: # New input
+    runAllTestsAfterXBuilds:
       required: false
       type: string
       default: "50"

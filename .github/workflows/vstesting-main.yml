@@ -8,13 +8,13 @@ on:
 
 jobs:
   vstest-action:
-    runs-on: "self-hosted"
+    runs-on: "windows-latest"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: VS-TEST
-        uses: ./.github/actions/VSTEST
+        uses: ./.github/actions/VSTESTING
         with:
           runsOn: "self-hosted"
           dotnet-version: "9.0.203"

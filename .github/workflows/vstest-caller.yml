@@ -10,13 +10,6 @@ jobs:
   vstest-action:
     runs-on: "Self-hosted"
     steps:
-      - name: Cleanup Workflow Directory
-        run: |
-          echo "Cleaning up workflow directory"
-          if [ -d "${{ runner.workspace }}" ]; then
-            rm -rf "${{ runner.workspace }}"
-          fi
-
       - name: Checkout Code
         uses: actions/checkout@v4
 

@@ -13,27 +13,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Chocolatey (if missing)
-        shell: pwsh
-        run: |
-          if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
-            Write-Host "Chocolatey is not installed. Installing Chocolatey..."
-            Set-ExecutionPolicy Bypass -Scope Process -Force;
-            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
-            iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
-          } else {
-            Write-Host "Chocolatey is already installed."
-          }
-
       - name: Install Visual Studio Test Platform (if missing)
         shell: pwsh
         run: |
           echo "Checking if Visual Studio Test Platform is installed..."
-          if (!(Test-Path "C:Program Files (x86)Microsoft Visual Studio2019EnterpriseCommon7IDEExtensionsTestPlatformvstest.console.exe")) {
+          $vstestPath = "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
+          if (!(Test-Path $vstestPath)) {
             echo "vstest.console.exe not found. Installing Visual Studio Test Platform..."
-            choco install microsoft-build-tools --version=17.6.5 -y
+            dotnet tool install --global Microsoft.TestPlatform
           } else {
-            echo "vstest.console.exe is already installed."
+            echo "vstest.console.exe is already installed at $vstestPath."
           }
 
       - name: VS-TEST
@@ -54,7 +43,7 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "C:Program Files (x86)Microsoft Visual Studio2019EnterpriseCommon7IDEExtensionsTestPlatformvstest.console.exe"
+          vstestLocation: "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
           runSettingsFile: "${{ github.workspace }}TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true

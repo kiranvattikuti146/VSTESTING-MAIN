@@ -1,4 +1,4 @@
-name: MAIN WorkfloW
+name: MAIN Workflow
 
 on:
   push:
@@ -12,6 +12,16 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Install Visual Studio Test Platform (if missing)
+        run: |
+          echo "Checking if Visual Studio Test Platform is installed..."
+          if (!(Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\IDE\Extensions\TestPlatform\vstest.console.exe")) {
+            echo "vstest.console.exe not found. Installing Visual Studio Test Platform..."
+            choco install microsoft-build-tools --version=17.6.5 -y
+          } else {
+            echo "vstest.console.exe is already installed."
+          }
 
       - name: VS-TEST
         uses: ./.github/actions/VSTESTING

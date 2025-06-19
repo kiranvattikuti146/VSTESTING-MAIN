@@ -48,7 +48,10 @@ inputs:
     required: false
     type: string
   vstestLocation:
-    required: false
+    required: true
+    type: string
+  runSettingsFile:
+    required: true
     type: string
   diagnosticsEnabled:
     required: false
@@ -152,7 +155,7 @@ runs:
         # Run VSTest for each resolved test assembly
         foreach ($testAssembly in $testAssemblies) {
           $escapedTestAssembly = "`"$testAssembly`"" # Properly escape the test assembly path
-          $command = "${{ inputs.vstestLocation }} $escapedTestAssembly /Settings:TestSettings.runsettings /ResultsDirectory:`"$env:RESULTS_FOLDER`" $($vstestArgs -join ' ')"
+          $command = "`"${{ inputs.vstestLocation }}`" $escapedTestAssembly /Settings:`"${{ inputs.runSettingsFile }}`" /ResultsDirectory:`"$env:RESULTS_FOLDER`" $($vstestArgs -join ' ')"
           Write-Host "Executing: $command"
           Invoke-Expression $command
         }

@@ -31,7 +31,7 @@ jobs:
       rerunMaxAttempts: "3"
       dontDistribute: false
       searchFolder: "${{ github.workspace }}" # Updated input
-      resultsFolder: "${{ runner.temp }}/TestResults" # Updated input
+      resultsFolder: "${{ github.workspace }}/TestResults" # Updated input
       testFiltercriteria: "" # New input
       runOnlyImpactedTests: false # New input
       runAllTestsAfterXBuilds: "50" # New input

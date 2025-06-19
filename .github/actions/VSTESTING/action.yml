@@ -111,10 +111,13 @@ runs:
       shell: pwsh
       run: |
         # Check if vstest.console.exe exists
-        $vstestPath = "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
+        $vstestPath = "$env:USERPROFILE.vstestvstest.console.exe"
         if (-not (Test-Path -Path $vstestPath)) {
-          Write-Host "vstest.console.exe not found. Installing Visual Studio Test Platform..."
-          dotnet tool install --global Microsoft.TestPlatform
+          Write-Host "vstest.console.exe not found. Installing Visual Studio Test Platform using NuGet..."
+          mkdir -Force "$env:USERPROFILE.vstest"
+          cd "$env:USERPROFILE.vstest"
+          dotnet new tool-manifest
+          dotnet tool install Microsoft.TestPlatform --tool-path "$env:USERPROFILE.vstest"
         } else {
           Write-Host "vstest.console.exe is already installed at path: $vstestPath"
         }
@@ -150,7 +153,7 @@ runs:
         $testAssemblies | ForEach-Object { Write-Host $_ }
 
         # Verify vstest.console.exe exists
-        $vstestPath = "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
+        $vstestPath = "$env:USERPROFILE.vstestvstest.console.exe"
         if (-not (Test-Path -Path $vstestPath)) {
           Write-Error "vstest.console.exe not found at path: $vstestPath"
           exit 1

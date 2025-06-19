@@ -1,0 +1,37 @@
+name: MAIN Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  vstest-action:
+    runs-on: "self-hosted"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: dotnet-test
+        uses: ./.github/actions/vstest
+        with:
+          dotnet-version: "7.0.x"
+          testSelector: "testAssemblies" # Using testAssemblies as the test selection method
+          testAssemblyVer2: '*Abstractions.dll' # Specify the test files to run
+          code-coverage-enabled: true
+          configuration: "Release"
+          platform: "x64"
+          test-run-title: "Unit Tests"
+          run-in-parallel: true
+          testPlan: "Plan1"
+          testSuite: "SuiteA"
+          testConfiguration: "DebugConfig"
+          tcmTestRun: "1234"
+          uiTests: false
+          vsTestVersion: "latest"
+          diagnosticsEnabled: true
+          rerunFailedTests: true
+          rerunType: "specific"
+          rerunMaxAttempts: "3"
+          dontDistribute: false

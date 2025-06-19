@@ -16,8 +16,8 @@ jobs:
       - name: dotnet-test
         uses: ./.github/actions/vstest
         with:
-          runsOn: "windows-latest"
-          dotnet-version: "9.0.203"
+          runsOn: "self-hosted"
+          dotnet-version: "7.0.x"
           testSelector: "testAssemblies"
           testAssemblyVer2: '*Abstractions.dll'
           code-coverage-enabled: true

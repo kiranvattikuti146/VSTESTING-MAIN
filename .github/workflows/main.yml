@@ -10,7 +10,7 @@ jobs:
   run-tests:
     uses: kiranvattikuti146/VSTEST-ACTION/.github/workflows/VStest-reusable.yml@main
     with:
-      runsOn: "windows-latest"
+      runsOn: ""
       dotnet-version: "7.0.x"
       testSelector: "testAssemblies" # Using testAssemblies as the test selection method
       testAssemblyVer2: '*AspnetCoreMvcFull.dll' # Specify the test files to run

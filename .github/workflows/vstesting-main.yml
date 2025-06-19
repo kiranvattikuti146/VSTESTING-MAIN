@@ -17,10 +17,13 @@ jobs:
         shell: pwsh
         run: |
           echo "Checking if Visual Studio Test Platform is installed..."
-          $vstestPath = "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
+          $vstestPath = "$env:USERPROFILE.dotnettoolsvstest.console.exe"
           if (!(Test-Path $vstestPath)) {
-            echo "vstest.console.exe not found. Installing Visual Studio Test Platform..."
-            dotnet tool install --global Microsoft.TestPlatform
+            echo "vstest.console.exe not found. Installing Visual Studio Test Platform using NuGet..."
+            mkdir -Force "$env:USERPROFILE.vstest"
+            cd "$env:USERPROFILE.vstest"
+            dotnet new tool-manifest
+            dotnet tool install Microsoft.TestPlatform --tool-path "$env:USERPROFILE.vstest"
           } else {
             echo "vstest.console.exe is already installed at $vstestPath."
           }
@@ -43,7 +46,7 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
+          vstestLocation: "${{ env.USERPROFILE }}.vstestvstest.console.exe"
           runSettingsFile: "${{ github.workspace }}TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true

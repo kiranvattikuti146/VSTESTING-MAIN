@@ -107,6 +107,18 @@ runs:
         Write-Host "Listing all files in the working directory:"
         Get-ChildItem -Path $workingDirectory -Recurse | ForEach-Object { Write-Host $_.FullName }
 
+    - name: Install Chocolatey (if missing)
+      shell: pwsh
+      run: |
+        if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
+          Write-Host "Chocolatey is not installed. Installing Chocolatey..."
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
+        } else {
+          Write-Host "Chocolatey is already installed."
+        }
+
     - name: Install Visual Studio Test Platform (if missing)
       shell: pwsh
       run: |

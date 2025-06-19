@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/VSTEST
         with:
           runsOn: "self-hosted"
-          dotnet-version: "9.0.203"
+          dotnet-version: "7.0.x"
           testSelector: "testAssemblies"
           testAssemblyVer2: '*Abstractions.dll'
           code-coverage-enabled: true

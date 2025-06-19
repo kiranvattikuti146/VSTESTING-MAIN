@@ -107,26 +107,14 @@ runs:
         Write-Host "Listing all files in the working directory:"
         Get-ChildItem -Path $workingDirectory -Recurse | ForEach-Object { Write-Host $_.FullName }
 
-    - name: Install Chocolatey (if missing)
-      shell: pwsh
-      run: |
-        if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
-          Write-Host "Chocolatey is not installed. Installing Chocolatey..."
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
-        } else {
-          Write-Host "Chocolatey is already installed."
-        }
-
     - name: Install Visual Studio Test Platform (if missing)
       shell: pwsh
       run: |
         # Check if vstest.console.exe exists
-        $vstestPath = "${{ inputs.vstestLocation }}"
+        $vstestPath = "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
         if (-not (Test-Path -Path $vstestPath)) {
-          Write-Host "vstest.console.exe not found at path: $vstestPath. Installing Visual Studio Test Platform..."
-          choco install microsoft-build-tools --version=17.6.5 -y
+          Write-Host "vstest.console.exe not found. Installing Visual Studio Test Platform..."
+          dotnet tool install --global Microsoft.TestPlatform
         } else {
           Write-Host "vstest.console.exe is already installed at path: $vstestPath"
         }
@@ -162,7 +150,7 @@ runs:
         $testAssemblies | ForEach-Object { Write-Host $_ }
 
         # Verify vstest.console.exe exists
-        $vstestPath = "${{ inputs.vstestLocation }}"
+        $vstestPath = "C:\Users\$env:USERNAME\.dotnet\tools\vstest.console.exe"
         if (-not (Test-Path -Path $vstestPath)) {
           Write-Error "vstest.console.exe not found at path: $vstestPath"
           exit 1

@@ -1,4 +1,4 @@
-name: MAIN WorkfloW
+name: MAIN Workflow
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "C:\\Program Files\\Microsoft Visual Studio\\2022\\community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
+          vstestLocation: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
           diagnosticsEnabled: true
           rerunFailedTests: true
           rerunType: "specific"

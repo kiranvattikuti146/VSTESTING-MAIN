@@ -136,8 +136,16 @@ runs:
           exit 1
         }
 
+        # Normalize vstestPath and test assembly paths
+        $vstestPath = $vstestPath -replace '\\', '/'
+        $testAssemblies = $testAssemblies | ForEach-Object { $_ -replace '\\', '/' }
+
         # Run VSTest for each resolved test assembly
         foreach ($testAssembly in $testAssemblies) {
+          # Debug: Validate paths
+          Write-Host "Test Assembly Path: $testAssembly"
+          Write-Host "VSTest Path: $vstestPath"
+
           # Construct arguments for vstest.console.exe
           $vstestArgs = @()
           $vstestArgs += "`"$testAssembly`"" # Properly quote the test assembly path

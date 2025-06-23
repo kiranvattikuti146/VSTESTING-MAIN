@@ -105,21 +105,19 @@ runs:
         $testAssemblies | ForEach-Object { Write-Host $_ }
 
         # Verify vstest.console.exe exists
-        $vstestPath = "${{ inputs.vstestLocation }}"
+        $vstestPath = Resolve-Path -Path "${{ inputs.vstestLocation }}"
         if (-not (Test-Path -Path $vstestPath -PathType Leaf)) {
           Write-Error "vstest.console.exe not found at path: $vstestPath"
           exit 1
         }
 
-        # Normalize vstestPath and test assembly paths
-        $vstestPath = $vstestPath -replace '', '/'
-        $testAssemblies = $testAssemblies | ForEach-Object { $_ -replace '', '/' }
+        # Debug: Validate vstestPath
+        Write-Host "Resolved VSTest Path: $vstestPath"
 
         # Run VSTest for each resolved test assembly
         foreach ($testAssembly in $testAssemblies) {
           # Debug: Validate paths
           Write-Host "Test Assembly Path: $testAssembly"
-          Write-Host "VSTest Path: $vstestPath"
 
           # Construct arguments for vstest.console.exe
           $vstestArgs = @()
@@ -139,5 +137,5 @@ runs:
 
           # Execute vstest.console.exe with call operator (&)
           Write-Host "Executing: `"$vstestPath`" $($vstestArgs -join ' ')"
-          & $vstestPath @vstestArgs
+          & "$vstestPath" @vstestArgs
         }

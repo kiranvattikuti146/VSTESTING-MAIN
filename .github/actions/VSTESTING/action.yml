@@ -135,7 +135,10 @@ runs:
           }
           if ($uiTests) { $vstestArgs += "/UITests" }
 
+          # Escape the vstest path to handle illegal characters
+          $escapedVstestPath = [System.IO.Path]::GetFullPath($vstestPath)
+
           # Execute vstest.console.exe with call operator (&)
-          Write-Host "Executing: `"$vstestPath`" $($vstestArgs -join ' ')"
-          & "$vstestPath" @vstestArgs
+          Write-Host "Executing: `"$escapedVstestPath`" $($vstestArgs -join ' ')"
+          & "$escapedVstestPath" @vstestArgs
         }

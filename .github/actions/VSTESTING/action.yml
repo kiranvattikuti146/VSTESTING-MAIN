@@ -1,144 +1,43 @@
-name: VSTest Reusable Workflow
+name: MAIN Workflow
 
-inputs:
-  runsOn:
-    required: true
-  dotnet-version:
-    required: true
-  testSelector:
-    required: true
-    default: "testAssemblies"
-  testAssemblyVer2:
-    required: true
-  configuration:
-    required: true
-  platform:
-    required: false
-  code-coverage-enabled:
-    required: false
-  test-run-title:
-    required: false
-  run-in-parallel:
-    required: false
-  testPlan:
-    required: false
-  testSuite:
-    required: false
-  testConfiguration:
-    required: false
-  tcmTestRun:
-    required: false
-  uiTests:
-    required: false
-  vsTestVersion:
-    required: false
-  vstestLocation:
-    required: true
-  diagnosticsEnabled:
-    required: false
-  rerunFailedTests:
-    required: false
-  rerunType:
-    required: false
-  rerunMaxAttempts:
-    required: false
-  dontDistribute:
-    required: false
-  searchFolder:
-    required: true
-  testFiltercriteria:
-    required: false
-  runOnlyImpactedTests:
-    required: false
-    default: false
-  runAllTestsAfterXBuilds:
-    required: false
-    default: "50"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
-runs:
-  using: 'composite'
-  steps:
-    - name: Restore dependencies
-      shell: pwsh
-      run: dotnet restore
+jobs:
+  vstest-action:
+    runs-on: "self-hosted"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Build solution
-      shell: pwsh
-      run: dotnet build --configuration ${{ inputs.configuration }} --no-restore
-
-    - name: Debug Directory Structure
-      shell: pwsh
-      run: |
-        # Debug: List all files in the working directory
-        $workingDirectory = "${{ env.GITHUB_WORKSPACE }}"
-        Set-Location -Path $workingDirectory
-        Write-Host "Listing all files in the working directory:"
-        Get-ChildItem -Path $workingDirectory -Recurse | ForEach-Object { Write-Host $_.FullName }
-
-    - name: Run tests with Visual Studio Test Runner
-      shell: pwsh
-      env:
-        SEARCH_FOLDER: ${{ inputs.searchFolder }}
-      run: |
-        # Ensure the correct working directory
-        $workingDirectory = $env:SEARCH_FOLDER
-        Set-Location -Path $workingDirectory
-
-        # Convert inputs to boolean
-        $codeCoverageEnabled = [bool]::Parse("${{ inputs.code-coverage-enabled }}")
-        $runInParallel = [bool]::Parse("${{ inputs.run-in-parallel }}")
-        $diagnosticsEnabled = [bool]::Parse("${{ inputs.diagnosticsEnabled }}")
-        $rerunFailedTests = [bool]::Parse("${{ inputs.rerunFailedTests }}")
-        $uiTests = [bool]::Parse("${{ inputs.uiTests }}")
-        $runOnlyImpactedTests = [bool]::Parse("${{ inputs.runOnlyImpactedTests }}")
-
-        # Resolve test assemblies from the bin directory, excluding obj folder
-        $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File -Include *.dll |
-          Where-Object { $_.FullName -notmatch 'obj' } | ForEach-Object { $_.FullName }
-        if (-not $testAssemblies) {
-          Write-Error "No test assemblies found."
-          exit 1
-        }
-
-        # Debug: List resolved test assemblies
-        Write-Host "Resolved test assemblies:"
-        $testAssemblies | ForEach-Object { Write-Host $_ }
-
-        # Verify vstest.console.exe exists
-        $vstestPath = Resolve-Path -Path "${{ inputs.vstestLocation }}"
-        if (-not (Test-Path -Path $vstestPath -PathType Leaf)) {
-          Write-Error "vstest.console.exe not found at path: $vstestPath"
-          exit 1
-        }
-
-        # Debug: Validate vstestPath
-        Write-Host "Resolved VSTest Path: $vstestPath"
-
-        # Run VSTest for each resolved test assembly
-        foreach ($testAssembly in $testAssemblies) {
-          # Debug: Validate paths
-          Write-Host "Test Assembly Path: $testAssembly"
-
-          # Construct arguments for vstest.console.exe
-          $vstestArgs = @()
-          $vstestArgs += "`"$testAssembly`"" # Properly quote the test assembly path
-          if ($codeCoverageEnabled) { $vstestArgs += '/EnableCodeCoverage' }
-          if ($runInParallel) { $vstestArgs += '/Parallel' }
-          if ($diagnosticsEnabled) { $vstestArgs += '/Diag:logfile.txt' }
-          if ($rerunFailedTests) { $vstestArgs += "/Rerun:${{ inputs.rerunType }}" }
-          if (-not [string]::IsNullOrWhiteSpace("${{ inputs.testFiltercriteria }}")) { 
-            $vstestArgs += "/TestCaseFilter:`"${{ inputs.testFiltercriteria }}`"" 
-          }
-          if ($runOnlyImpactedTests) { 
-            $vstestArgs += "/ImpactedTests"
-            $vstestArgs += "/RunAllTestsAfter:${{ inputs.runAllTestsAfterXBuilds }}"
-          }
-          if ($uiTests) { $vstestArgs += "/UITests" }
-
-          # Escape the vstest path to handle illegal characters
-          $escapedVstestPath = [System.IO.Path]::GetFullPath($vstestPath)
-
-          # Execute vstest.console.exe with call operator (&)
-          Write-Host "Executing: `"$escapedVstestPath`" $($vstestArgs -join ' ')"
-          & "$escapedVstestPath" @vstestArgs
-        }
+      - name: VS-TEST
+        uses: ./.github/actions/VSTESTING
+        with:
+          runsOn: "self-hosted"
+          dotnet-version: "9.0.203"
+          testSelector: "testAssemblies"
+          testAssemblyVer2: '*Abstractions.dll'
+          code-coverage-enabled: true
+          configuration: "Release"
+          platform: "x64"
+          test-run-title: "Unit Tests"
+          run-in-parallel: true
+          testPlan: "Plan1"
+          testSuite: "SuiteA"
+          testConfiguration: "DebugConfig"
+          tcmTestRun: "1234"
+          uiTests: false
+          vsTestVersion: "latest"
+          vstestLocation: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
+          diagnosticsEnabled: true
+          rerunFailedTests: true
+          rerunType: "specific"
+          rerunMaxAttempts: "3"
+          dontDistribute: false
+          searchFolder: "${{ github.workspace }}"
+          testFiltercriteria: ""
+          runOnlyImpactedTests: false
+          runAllTestsAfterXBuilds: "50"

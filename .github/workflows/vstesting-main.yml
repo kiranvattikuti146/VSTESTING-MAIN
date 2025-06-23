@@ -32,14 +32,12 @@ jobs:
           uiTests: false
           vsTestVersion: "latest"
           vstestLocation: "C:\\Program Files\\Microsoft Visual Studio\\2022\\community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
-          runSettingsFile: "${{ github.workspace }}/TestSettings.runsettings"
           diagnosticsEnabled: true
           rerunFailedTests: true
           rerunType: "specific"
           rerunMaxAttempts: "3"
           dontDistribute: false
           searchFolder: "${{ github.workspace }}"
-          resultsFolder: "${{ github.workspace }}/TestResults"
           testFiltercriteria: ""
           runOnlyImpactedTests: false
           runAllTestsAfterXBuilds: "50"

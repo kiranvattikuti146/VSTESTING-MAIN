@@ -3,81 +3,56 @@ name: VSTest Reusable Workflow
 inputs:
   runsOn:
     required: true
-    type: string
   dotnet-version:
     required: true
-    type: string
   testSelector:
     required: true
-    type: string
     default: "testAssemblies"
   testAssemblyVer2:
     required: true
-    type: string
   configuration:
     required: true
-    type: string
   platform:
     required: false
-    type: string
   code-coverage-enabled:
     required: false
-    type: boolean
   test-run-title:
     required: false
-    type: string
   run-in-parallel:
     required: false
-    type: boolean
   testPlan:
     required: false
-    type: string
   testSuite:
     required: false
-    type: string
   testConfiguration:
     required: false
-    type: string
   tcmTestRun:
     required: false
-    type: string
   uiTests:
     required: false
-    type: boolean
   vsTestVersion:
     required: false
-    type: string
   vstestLocation:
     required: true
-    type: string
   diagnosticsEnabled:
     required: false
-    type: boolean
   rerunFailedTests:
     required: false
-    type: boolean
   rerunType:
     required: false
-    type: string
   rerunMaxAttempts:
     required: false
-    type: string
   dontDistribute:
     required: false
-    type: boolean
   searchFolder:
     required: true
-    type: string
   testFiltercriteria:
     required: false
-    type: string
   runOnlyImpactedTests:
     required: false
-    type: boolean
     default: false
   runAllTestsAfterXBuilds:
     required: false
-    type: string
     default: "50"
 
 runs:
@@ -137,8 +112,8 @@ runs:
         }
 
         # Normalize vstestPath and test assembly paths
-        $vstestPath = $vstestPath -replace '\\', '/'
-        $testAssemblies = $testAssemblies | ForEach-Object { $_ -replace '\\', '/' }
+        $vstestPath = $vstestPath -replace '', '/'
+        $testAssemblies = $testAssemblies | ForEach-Object { $_ -replace '', '/' }
 
         # Run VSTest for each resolved test assembly
         foreach ($testAssembly in $testAssemblies) {

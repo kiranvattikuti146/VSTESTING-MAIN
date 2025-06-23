@@ -69,7 +69,6 @@ runs:
     - name: Debug Directory Structure
       shell: pwsh
       run: |
-        # Debug: List all files in the working directory
         $workingDirectory = "${{ env.GITHUB_WORKSPACE }}"
         Set-Location -Path $workingDirectory
         Write-Host "Listing all files in the working directory:"
@@ -80,17 +79,28 @@ runs:
       env:
         SEARCH_FOLDER: ${{ inputs.searchFolder }}
       run: |
-        # Ensure the correct working directory
         $workingDirectory = $env:SEARCH_FOLDER
         Set-Location -Path $workingDirectory
 
-        # Convert inputs to boolean
+        # Convert inputs to boolean and validate strings
         $codeCoverageEnabled = [bool]::Parse("${{ inputs.code-coverage-enabled }}")
         $runInParallel = [bool]::Parse("${{ inputs.run-in-parallel }}")
         $diagnosticsEnabled = [bool]::Parse("${{ inputs.diagnosticsEnabled }}")
         $rerunFailedTests = [bool]::Parse("${{ inputs.rerunFailedTests }}")
         $uiTests = [bool]::Parse("${{ inputs.uiTests }}")
         $runOnlyImpactedTests = [bool]::Parse("${{ inputs.runOnlyImpactedTests }}")
+
+        # Validate and sanitize vstestLocation path
+        $vstestPath = "${{ inputs.vstestLocation }}"
+        if ([string]::IsNullOrWhiteSpace($vstestPath)) {
+          Write-Error "vstestLocation input is empty or invalid."
+          exit 1
+        }
+        $vstestPath = [System.IO.Path]::GetFullPath($vstestPath)
+        if (-not (Test-Path -Path $vstestPath -PathType Leaf)) {
+          Write-Error "vstest.console.exe not found at path: $vstestPath"
+          exit 1
+        }
 
         # Resolve test assemblies from the bin directory, excluding obj folder
         $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File -Include *.dll |
@@ -100,28 +110,15 @@ runs:
           exit 1
         }
 
-        # Debug: List resolved test assemblies
         Write-Host "Resolved test assemblies:"
         $testAssemblies | ForEach-Object { Write-Host $_ }
 
-        # Verify vstest.console.exe exists
-        $vstestPath = Resolve-Path -Path "${{ inputs.vstestLocation }}"
-        if (-not (Test-Path -Path $vstestPath -PathType Leaf)) {
-          Write-Error "vstest.console.exe not found at path: $vstestPath"
-          exit 1
-        }
-
-        # Debug: Validate vstestPath
-        Write-Host "Resolved VSTest Path: $vstestPath"
-
-        # Run VSTest for each resolved test assembly
         foreach ($testAssembly in $testAssemblies) {
-          # Debug: Validate paths
           Write-Host "Test Assembly Path: $testAssembly"
 
           # Construct arguments for vstest.console.exe
           $vstestArgs = @()
-          $vstestArgs += "`"$testAssembly`"" # Properly quote the test assembly path
+          $vstestArgs += "`"$testAssembly`"" 
           if ($codeCoverageEnabled) { $vstestArgs += '/EnableCodeCoverage' }
           if ($runInParallel) { $vstestArgs += '/Parallel' }
           if ($diagnosticsEnabled) { $vstestArgs += '/Diag:logfile.txt' }
@@ -135,10 +132,6 @@ runs:
           }
           if ($uiTests) { $vstestArgs += "/UITests" }
 
-          # Escape the vstest path to handle illegal characters
-          $escapedVstestPath = [System.IO.Path]::GetFullPath($vstestPath)
-
-          # Execute vstest.console.exe with call operator (&)
-          Write-Host "Executing: `"$escapedVstestPath`" $($vstestArgs -join ' ')"
-          & "$escapedVstestPath" @vstestArgs
+          Write-Host "Executing: `"$vstestPath`" $($vstestArgs -join ' ')"
+          & "$vstestPath" @vstestArgs
         }

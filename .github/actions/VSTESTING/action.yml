@@ -50,9 +50,6 @@ inputs:
   vstestLocation:
     required: true
     type: string
-  runSettingsFile:
-    required: true
-    type: string
   diagnosticsEnabled:
     required: false
     type: boolean
@@ -71,10 +68,6 @@ inputs:
   searchFolder:
     required: true
     type: string
-  resultsFolder:
-    required: false
-    type: string
-    default: "./TestResults"
   testFiltercriteria:
     required: false
     type: string
@@ -111,7 +104,6 @@ runs:
       shell: pwsh
       env:
         SEARCH_FOLDER: ${{ inputs.searchFolder }}
-        RESULTS_FOLDER: ${{ inputs.resultsFolder }}
       run: |
         # Ensure the correct working directory
         $workingDirectory = $env:SEARCH_FOLDER
@@ -149,8 +141,6 @@ runs:
           # Construct arguments for vstest.console.exe
           $vstestArgs = @()
           $vstestArgs += "`"$testAssembly`"" # Properly quote the test assembly path
-          $vstestArgs += "/Settings:`"${{ inputs.runSettingsFile }}`""
-          $vstestArgs += "/ResultsDirectory:`"$env:RESULTS_FOLDER`""
           if ($codeCoverageEnabled) { $vstestArgs += '/EnableCodeCoverage' }
           if ($runInParallel) { $vstestArgs += '/Parallel' }
           if ($diagnosticsEnabled) { $vstestArgs += '/Diag:logfile.txt' }

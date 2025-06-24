@@ -39,8 +39,8 @@ jobs:
           rerunType: "specific"
           rerunMaxAttempts: "3"
           dontDistribute: false
-          searchFolder: "${{ github.workspace }}"
-          resultsFolder: "${{ github.workspace }}/TestResults"
+          searchFolder: "$(System.DefaultWorkingDirectory)"
+          resultsFolder: "$(Agent.TempDirectory)\\TestResults"
           testFiltercriteria: ""
           runOnlyImpactedTests: false
           runAllTestsAfterXBuilds: "50"

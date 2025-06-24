@@ -82,6 +82,14 @@ runs:
         $workingDirectory = $env:SEARCH_FOLDER
         Set-Location -Path $workingDirectory
 
+        # Convert inputs to boolean and validate strings
+        $codeCoverageEnabled = [bool]::Parse("${{ inputs.code-coverage-enabled }}")
+        $runInParallel = [bool]::Parse("${{ inputs.run-in-parallel }}")
+        $diagnosticsEnabled = [bool]::Parse("${{ inputs.diagnosticsEnabled }}")
+        $rerunFailedTests = [bool]::Parse("${{ inputs.rerunFailedTests }}")
+        $uiTests = [bool]::Parse("${{ inputs.uiTests }}")
+        $runOnlyImpactedTests = [bool]::Parse("${{ inputs.runOnlyImpactedTests }}")
+
         # Validate and sanitize vstestLocation path
         $vstestPath = "${{ inputs.vstestLocation }}"
         if ([string]::IsNullOrWhiteSpace($vstestPath)) {
@@ -111,18 +119,18 @@ runs:
           # Construct arguments for vstest.console.exe
           $vstestArgs = @()
           $vstestArgs += "`"$testAssembly`"" 
-          if (${{ inputs.code-coverage-enabled }}) { $vstestArgs += '/EnableCodeCoverage' }
-          if (${{ inputs.run-in-parallel }}) { $vstestArgs += '/Parallel' }
-          if (${{ inputs.diagnosticsEnabled }}) { $vstestArgs += '/Diag:logfile.txt' }
-          if (${{ inputs.rerunFailedTests }}) { $vstestArgs += "/Rerun:${{ inputs.rerunType }}" }
-          if (${{ inputs.testFiltercriteria }}) { 
+          if ($codeCoverageEnabled) { $vstestArgs += '/EnableCodeCoverage' }
+          if ($runInParallel) { $vstestArgs += '/Parallel' }
+          if ($diagnosticsEnabled) { $vstestArgs += '/Diag:logfile.txt' }
+          if ($rerunFailedTests) { $vstestArgs += "/Rerun:${{ inputs.rerunType }}" }
+          if (-not [string]::IsNullOrWhiteSpace("${{ inputs.testFiltercriteria }}")) { 
             $vstestArgs += "/TestCaseFilter:`"${{ inputs.testFiltercriteria }}`"" 
           }
-          if (${{ inputs.runOnlyImpactedTests }}) { 
+          if ($runOnlyImpactedTests) { 
             $vstestArgs += "/ImpactedTests"
             $vstestArgs += "/RunAllTestsAfter:${{ inputs.runAllTestsAfterXBuilds }}"
           }
-          if (${{ inputs.uiTests }}) { $vstestArgs += "/UITests" }
+          if ($uiTests) { $vstestArgs += "/UITests" }
 
           Write-Host "Executing: `"$vstestPath`" $($vstestArgs -join ' ')"
           & "$vstestPath" @vstestArgs

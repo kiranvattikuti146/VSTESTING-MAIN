@@ -31,12 +31,29 @@ jobs:
           tcmTestRun: "1234"
           uiTests: false
           vsTestVersion: "latest"
-          vstestLocation: "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe"
-          diagnosticsEnabled: true
+          vstestLocation: "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/Extensions/TestPlatform/vstest.console.exe"
+          vstestLocationMethod: 'version'
+          resultsFolder: '$(Agent.TempDirectory)TestResults'
+          runSettingsFile: ${{ github.workspace }}/tests/Test.runsettings'
+          overrideTestrunParameters: TestRunParameter1=Value1;TestRunParameter2=Value2'
+          pathtoCustomTestAdapters: '${{ github.workspace }}/testAdapters'
+          runTestsInIsolation: False
+          otherConsoleOptions: '/Logger:trx'
+          collectDumpOn: 'onAbortOnly'
           rerunFailedTests: true
           rerunType: "specific"
           rerunMaxAttempts: "3"
+          rerunFailedThreshold: '30'
+          rerunFailedTestCasesMaxLimit: '5'
           dontDistribute: false
+          distributionBatchType: 'basedOnTestCases'
+          batchingBasedOnAgentsOption: 'autoBatchSize'
+          customBatchSizeValue: '10'
+          batchingBasedOnExecutionTimeOption: 'autoBatchSize'
+          customRunTimePerBatchValue: '60'
+          publishRunAttachments: true
+          failOnMinTestsNotRun: False
+          minimumExpectedTests: '1'
           searchFolder: "${{ github.workspace }}"
           testFiltercriteria: ""
           runOnlyImpactedTests: false

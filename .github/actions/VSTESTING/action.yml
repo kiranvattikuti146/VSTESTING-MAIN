@@ -14,43 +14,115 @@ inputs:
     required: true
   platform:
     required: false
+    default: "x64"
   code-coverage-enabled:
     required: false
+    default: "true"
   test-run-title:
     required: false
+    default: "Unit Tests"
   run-in-parallel:
     required: false
+    default: "true"
   testPlan:
     required: false
+    default: "Plan1"
   testSuite:
     required: false
+    default: "SuiteA"
   testConfiguration:
     required: false
+    default: "DebugConfig"
   tcmTestRun:
     required: false
+    default: "1234"
   uiTests:
     required: false
+    default: "false"
   vsTestVersion:
     required: false
+    default: "latest"
   vstestLocation:
     required: true
+    default: "C:Program FilesMicrosoft Visual Studio2022CommunityCommon7IDEExtensionsTestPlatformvstest.console.exe"
+  vstestLocationMethod:
+    required: false
+    default: "version"
+  resultsFolder:
+    required: false
+    default: '$(Agent.TempDirectory)TestResults'
+  runSettingsFile:
+    required: false
+    default: '${{ github.workspace }}/tests/Test.runsettings'
+  overrideTestrunParameters:
+    required: false
+    default: 'TestRunParameter1=Value1;TestRunParameter2=Value2'
+  pathtoCustomTestAdapters:
+    required: false
+    default: '${{ github.workspace }}/testAdapters'
+  runTestsInIsolation:
+    required: false
+    default: "false"
+  otherConsoleOptions:
+    required: false
+    default: '/Logger:trx'
+  collectDumpOn:
+    required: false
+    default: 'onAbortOnly'
   diagnosticsEnabled:
     required: false
+    default: "false"
   rerunFailedTests:
     required: false
+    default: "true"
   rerunType:
     required: false
+    default: "specific"
   rerunMaxAttempts:
     required: false
+    default: "3"
+  rerunFailedThreshold:
+    required: false
+    default: '30'
+  rerunFailedTestCasesMaxLimit:
+    required: false
+    default: '5'
   dontDistribute:
     required: false
+    default: "false"
+  distributionBatchType:
+    required: false
+    default: 'basedOnTestCases'
+  batchingBasedOnAgentsOption:
+    required: false
+    default: 'autoBatchSize'
+  customBatchSizeValue:
+    required: false
+    default: '10'
+  batchingBasedOnExecutionTimeOption:
+    required: false
+    default: 'autoBatchSize'
+  customRunTimePerBatchValue:
+    required: false
+    default: '60'
+  publishRunAttachments:
+    required: false
+    default: "true"
+  failOnMinTestsNotRun:
+    required: false
+    default: "false"
+  minimumExpectedTests:
+    required: false
+    default: '1'
   searchFolder:
     required: true
+    default: '${{ github.workspace }}'
   testFiltercriteria:
     required: false
+    default: ''
   runOnlyImpactedTests:
     required: false
-    default: false
+    default: "false"
   runAllTestsAfterXBuilds:
     required: false
     default: "50"
@@ -91,6 +163,9 @@ runs:
         $rerunFailedTests = [bool]::Parse("${{ inputs.rerunFailedTests }}")
         $uiTests = [bool]::Parse("${{ inputs.uiTests }}")
         $runOnlyImpactedTests = [bool]::Parse("${{ inputs.runOnlyImpactedTests }}")
+        $runTestsInIsolation = [bool]::Parse("${{ inputs.runTestsInIsolation }}")
+        $publishRunAttachments = [bool]::Parse("${{ inputs.publishRunAttachments }}")
+        $failOnMinTestsNotRun = [bool]::Parse("${{ inputs.failOnMinTestsNotRun }}")
 
         # Resolve test assemblies from the bin directory, excluding obj folder
         $testAssemblies = Get-ChildItem -Path $workingDirectory -Recurse -File -Include *.dll |
@@ -116,6 +191,7 @@ runs:
           # Construct arguments for vstest.console.exe
           $vstestArgs = @()
           $vstestArgs += "`"$testAssembly`"" # Properly quote the test assembly path
+
           if ($codeCoverageEnabled) { $vstestArgs += '/EnableCodeCoverage' }
           if ($runInParallel) { $vstestArgs += '/Parallel' }
           if ($diagnosticsEnabled) { $vstestArgs += '/Diag:logfile.txt' }
@@ -128,6 +204,20 @@ runs:
             $vstestArgs += "/RunAllTestsAfter:${{ inputs.runAllTestsAfterXBuilds }}"
           }
           if ($uiTests) { $vstestArgs += "/UITests" }
+          if ($runTestsInIsolation) { $vstestArgs += "/InIsolation" }
+
+          if (-not [string]::IsNullOrWhiteSpace("${{ inputs.runSettingsFile }}")) { 
+            $vstestArgs += "/Settings:`"${{ inputs.runSettingsFile }}`"" 
+          }
+          if (-not [string]::IsNullOrWhiteSpace("${{ inputs.pathtoCustomTestAdapters }}")) { 
+            $vstestArgs += "/TestAdapterPath:`"${{ inputs.pathtoCustomTestAdapters }}`"" 
+          }
+          if (-not [string]::IsNullOrWhiteSpace("${{ inputs.overrideTestrunParameters }}")) { 
+            $vstestArgs += "/OverrideTestrunParameters:`"${{ inputs.overrideTestrunParameters }}`"" 
+          }
+          if (-not [string]::IsNullOrWhiteSpace("${{ inputs.otherConsoleOptions }}")) { 
+            $vstestArgs += "${{ inputs.otherConsoleOptions }}" 
+          }
 
           # Execute vstest.console.exe with call operator (&)
           Write-Host "Executing: `"$vstestPath`" $($vstestArgs -join ' ')"
